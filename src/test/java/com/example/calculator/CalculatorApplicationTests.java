@@ -53,8 +53,28 @@ class CalculatorApplicationTests {
 		Integer second = 7;
 		Integer expected = 0;
 
-		assert calculator.division(first, second).equals(expected);
-	}
+        assert calculator.division(first, second).equals(expected);
+    }
+
+
+    @Test
+    @DisplayName("exponentiation") //Возведение в степень
+    void test5() {
+        Double first = 5.0;
+        Double second = 4.0;
+        Double expected = 625.0;
+
+        assert calculator.exponentiation(first, second).equals(expected);
+    }
+
+    @Test
+    @DisplayName("sqrt") //Квадратный корень
+    void test6() {
+        Double first = 25.0;
+        Double expected = 5.0;
+
+        assert calculator.sqrt(first).equals(expected);
+    }
 
 
 }
