@@ -1,5 +1,6 @@
 package com.example.calculator;
 
+import io.qameta.allure.Step;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ class CalculatorApplicationTests {
     }
 
     @Test
+    @Step ("sum")
     @DisplayName("sum")
     void test1() {
         Integer first = 3;
@@ -26,6 +28,7 @@ class CalculatorApplicationTests {
     }
 
     @Test
+    @Step ("sub")
     @DisplayName("sub")
     void test2() {
         Integer first = 3;
@@ -37,6 +40,7 @@ class CalculatorApplicationTests {
 
 
     @Test
+    @Step ("mul")
     @DisplayName("mul")
     void test3() {
         Integer first = 3;
@@ -48,6 +52,7 @@ class CalculatorApplicationTests {
 
 
     @Test
+    @Step ("div")
     @DisplayName("div")
     void tes41() {
         Integer first = 3;
@@ -59,6 +64,7 @@ class CalculatorApplicationTests {
 
 
     @Test
+    @Step ("exponentiation")
     @DisplayName("exponentiation") //Возведение в степень
     void test5() {
         Double first = 5.0;
@@ -69,6 +75,7 @@ class CalculatorApplicationTests {
     }
 
     @Test
+    @Step ("sqrt")
     @DisplayName("sqrt") //Квадратный корень
     void test6() {
         Double first = 25.0;
