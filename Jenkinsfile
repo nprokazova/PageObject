@@ -8,6 +8,13 @@ pipeline {
         githubPush()
     }
 
+    environment {
+        LC_ALL = 'en_US.UTF-8'
+        LANG    = 'en_US.UTF-8'
+        LANGUAGE = 'en_US.UTF-8'
+        EMAIL_TO = 'naprokazova@gmail.com'
+    }
+
     parameters {
         string(name: 'GIT_URL', defaultValue: 'https://github.com/nprokazova/calculator', description: 'The target git url')
         string(name: 'GIT_BRANCH', defaultValue: 'master', description: 'The target git branch')
@@ -28,7 +35,7 @@ pipeline {
         stage('Run maven clean test') {
             steps {
                 bat 'mvn clean test -Dtest=CalculatorApplicationTests -Dbrowser_name=$BROWSER_NAME -Dbrowser_version=$BROWSER_VERSION'
-            } 
+            }
         }
         stage('Backup and Reports') {
             steps {
@@ -57,12 +64,22 @@ pipeline {
                     def message = "${currentBuild.currentResult}: Job ${env.JOB_NAME}, build ${env.BUILD_NUMBER}, branch ${branch}\nTest Summary - ${summary.totalCount}, Failures: ${summary.failCount}, Skipped: ${summary.skipCount}, Passed: ${summary.passCount}\nMore info at: ${env.BUILD_URL}"
                     println("message= " + message)
 
-                    def summary = junit testResults: '**/target/surefire-reports/*.xml'
+                    def sendNotifications() {
 
-                    def colorCode = '#FF0000'
-                    def slackMessage = "${currentBuild.currentResult}: Job ${env.JOB_NAME}, build ${env.BUILD_NUMBER}, branch ${branch}\nTest Summary - ${summary.totalCount}, Failures: ${summary.failCount}, Skipped: ${summary.skipCount},  Passed: ${summary.passCount}\nMore info at: ${env.BUILD_URL}"
+                        def summary = junit testResults: '**/target/surefire-reports/*.xml'
 
-                    slackSend(color: colorCode, message: slackMessage)
+                        emailext (
+                    		        subject: "Jenkins Report",
+                    		        body: emailMessage,
+                    		        to: "${EMAIL_TO}",
+                    		        from: "jenkins@code-maven.com"
+                        		    )
+
+                        def colorCode = '#FF0000'
+                        def slackMessage = "${currentBuild.currentResult}: Job ${env.JOB_NAME}, build ${env.BUILD_NUMBER}, branch ${branch}\nTest Summary - ${summary.totalCount}, Failures: ${summary.failCount}, Skipped: ${summary.skipCount},  Passed: ${summary.passCount}\nMore info at: ${env.BUILD_URL}"
+
+                        slackSend(color: colorCode, message: slackMessage)
+                    }
                   }
                 }
             }
