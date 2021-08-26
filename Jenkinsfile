@@ -68,9 +68,11 @@ pipeline {
 
                         def summary = junit testResults: '**/target/surefire-reports/*.xml'
 
+                        def emailMessage = "${currentBuild.currentResult}: Job '${env.JOB_NAME}', build ${env.BUILD_NUMBER}, branch ${branch}\nPassed time: ${currentBuild.durationString}\n\nTESTS:\nTotal = ${summary.totalCount}\nFailures = ${summary.failCount}\nSkipped = ${summary.skipCount}\nPassed = ${summary.passCount}\n\nMore info at: ${env.BUILD_URL}"
+
                         emailext (
                     		        subject: "Jenkins Report",
-                    		        body: emailMessage,
+                    		        body: """emailMessage""",
                     		        to: "${EMAIL_TO}",
                     		        from: "jenkins@code-maven.com"
                         		    )
