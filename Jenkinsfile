@@ -15,6 +15,10 @@ pipeline {
         EMAIL_TO = 'naprokazova@gmail.com'
     }
 
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '5'))
+    }
+
     parameters {
         string(name: 'GIT_URL', defaultValue: 'https://github.com/nprokazova/calculator', description: 'The target git url')
         string(name: 'GIT_BRANCH', defaultValue: 'master', description: 'The target git branch')
@@ -64,7 +68,9 @@ pipeline {
                     def message = "${currentBuild.currentResult}: Job ${env.JOB_NAME}, build ${env.BUILD_NUMBER}, branch ${branch}\nTest Summary - ${summary.totalCount}, Failures: ${summary.failCount}, Skipped: ${summary.skipCount}, Passed: ${summary.passCount}\nMore info at: ${env.BUILD_URL}"
                     println("message= " + message)
 
-                    def sendNotifications(
+                    sendNotifications()
+
+                    def sendNotifications{
 
                         def summary = junit testResults: '**/target/surefire-reports/*.xml'
 
@@ -72,7 +78,7 @@ pipeline {
 
                         emailext (
                     		        subject: "Jenkins Report",
-                    		        body: """emailMessage""",
+                    		        body: ""emailMessage"",
                     		        to: "${EMAIL_TO}",
                     		        from: "jenkins@code-maven.com"
                         		    )
@@ -81,7 +87,7 @@ pipeline {
                         def slackMessage = "${currentBuild.currentResult}: Job ${env.JOB_NAME}, build ${env.BUILD_NUMBER}, branch ${branch}\nTest Summary - ${summary.totalCount}, Failures: ${summary.failCount}, Skipped: ${summary.skipCount},  Passed: ${summary.passCount}\nMore info at: ${env.BUILD_URL}"
 
                         slackSend(color: colorCode, message: slackMessage)
-                    )
+                    }
                   }
                 }
             }
