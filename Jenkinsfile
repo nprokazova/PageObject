@@ -12,7 +12,7 @@ pipeline {
         LC_ALL = 'en_US.UTF-8'
         LANG    = 'en_US.UTF-8'
         LANGUAGE = 'en_US.UTF-8'
-        EMAIL_TO = 'test@gmail.com'
+        EMAIL_TO = 'naprokazova@gmail.com'
     }
 
     options {
@@ -48,7 +48,7 @@ pipeline {
             post {
                 always {
                   script {
-                    step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: "test@gmail.com", sendToIndividuals: true])
+                    step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: "naprokazova@gmail.com", sendToIndividuals: true])
 
                     // Формирование отчета
                     allure([
